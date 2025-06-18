@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request
 
-app = Flask(__name__)
+sys.path.append(os.path.dirname(__file__))
+
+app = Flask(
+    __name__,
+    template_folder=os.path.join(os.path.dirname(__file__), 'templates')
+)
 
 # Your original dictionaries
 months = {"Jan": 1,
