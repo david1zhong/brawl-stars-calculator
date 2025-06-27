@@ -1,117 +1,83 @@
 from flask import Flask, render_template, request
+import sys
+import os
 
-app = Flask(__name__)
+sys.path.append(os.path.dirname(__file__))
 
-# Your original dictionaries
-months = {"Jan": 1,
-          "Feb": 2,
-          "Mar": 3,
-          "Apr": 4,
-          "May": 5,
-          "Jun": 6,
-          "Jul": 7,
-          "Aug": 8,
-          "Sep": 9,
-          "Oct": 10,
-          "Nov": 11,
-          "Dec": 12}
+app = Flask(
+    __name__,
+    template_folder=os.path.join(os.path.dirname(__file__), 'templates')
+)
 
-week = {"Mon": 1,
-        "Tue": 2,
-        "Wed": 3,
-        "Thu": 4,
-        "Fri": 5,
-        "Sat": 6,
-        "Sun": 7}
+months = {"Jan": 1, "Feb": 2, "Mar": 3, "Apr": 4, "May": 5, "Jun": 6,
+          "Jul": 7, "Aug": 8, "Sep": 9, "Oct": 10, "Nov": 11, "Dec": 12}
 
-days = {"Jan": 31,
-        "Feb": 28,
-        "Mar": 31,
-        "Apr": 30,
-        "May": 31,
-        "Jun": 30,
-        "Jul": 31,
-        "Aug": 30,
-        "Sep": 31,
-        "Oct": 31,
-        "Nov": 30,
-        "Dec": 31}
+week = {"Mon": 1, "Tue": 2, "Wed": 3, "Thu": 4, "Fri": 5, "Sat": 6, "Sun": 7}
 
-def calculate_brawl_pass(current_balance, season, month, year):
-    brawl_pass_count = 0
-    when_brawl_pass = []
-    new_when_brawl_pass = []
-    current_season = [season]
-    season_details = []
+days = {"Jan": 31, "Feb": 28, "Mar": 31, "Apr": 30, "May": 31, "Jun": 30,
+        "Jul": 31, "Aug": 30, "Sep": 31, "Oct": 31, "Nov": 30, "Dec": 31}
+
+def calc_passes(gems, season, month, year):
+    passes = 0
+    when = []
+    seasons = []
+    start_season = season
     
-    for x in range(0, 6):
-        start_month = (list(months.keys())[list(months.values()).index(month)])
-        # Month Brawl Pass starts
+    for i in range(6):
+        start_month = list(months.keys())[list(months.values()).index(month)]
+        
         month += 2
-        current_balance += 90
+        gems += 90
         season += 1
-        if season == [a for a in current_season]:
-            current_balance -= 90
-            # Don't add 90 gems for current season
-            '''if current_balance >= 169:
-                 current_balance = current_balance + 169'''
-            # Only enable if not buying current seasons' brawl pass
-        if current_balance >= 169:
-            current_balance -= 169
-            brawl_pass_count += 1
-            when_brawl_pass.append(str(season))
-            # Assuming you buy the brawl pass as soon as you get the amount of gems
+        
+        if season == start_season:
+            gems -= 90
+        
+        if gems >= 169:
+            gems -= 169
+            passes += 1
+            when.append(f"Season {season}")
+        
         if month > 12:
             month -= 12
             year += 1
-        end_month = (list(months.keys())[list(months.values()).index(month)])
-        # Month Brawl Pass ends
+            
+        end_month = list(months.keys())[list(months.values()).index(month)]
         
-        # Store season details for display
-        season_details.append({
+        seasons.append({
             'season': season,
-            'start_month': start_month,
-            'end_month': end_month,
+            'start': start_month,
+            'end': end_month,
             'year': year,
-            'balance': current_balance
+            'gems': gems
         })
     
-    for x in when_brawl_pass:
-        new_when_brawl_pass.append(f"Season {x}")
-    
-    return {
-        'brawl_pass_count': brawl_pass_count,
-        'when_brawl_pass': new_when_brawl_pass,
-        'season_details': season_details
-    }
+    return {'passes': passes, 'when': when, 'seasons': seasons}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     results = None
-    input_data = None
+    data = None
     
     if request.method == 'POST':
         try:
-            current_balance = int(request.form['current_balance'])
+            gems = int(request.form['current_balance'])
             season = int(request.form['season'])
             month = int(request.form['month'])
             year = int(request.form['year'])
             
-            # Call your original function
-            results = calculate_brawl_pass(current_balance, season, month, year)
-            input_data = {
-                'current_balance': current_balance,
+            results = calc_passes(gems, season, month, year)
+            data = {
+                'gems': gems,
                 'season': season,
                 'month': list(months.keys())[month-1],
                 'year': year
             }
-        except (ValueError, KeyError):
+        except:
             pass
     
-    return render_template('index.html', 
-                         months=list(months.keys()),
-                         results=results,
-                         input_data=input_data)
+    return render_template('index.html', months=list(months.keys()), 
+                         results=results, data=data)
 
 if __name__ == '__main__':
     app.run(debug=True)

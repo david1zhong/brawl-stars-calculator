@@ -5,6 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brawl Pass Calculator</title>
     <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: white;
+            --bg-tertiary: #f8fafc;
+            --bg-quaternary: #f9fafb;
+            --bg-accent: #f0f9ff;
+            --text-primary: #334155;
+            --text-secondary: #1e293b;
+            --text-tertiary: #374151;
+            --text-quaternary: #1f2937;
+            --text-muted: #6b7280;
+            --text-placeholder: #9ca3af;
+            --border-primary: #e2e8f0;
+            --border-secondary: #d1d5db;
+            --border-tertiary: #e5e7eb;
+            --border-accent: #bae6fd;
+            --accent-primary: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-secondary: #0369a1;
+            --success-primary: #10b981;
+            --success-secondary: #059669;
+            --success-bg: #ecfdf5;
+            --success-border: #a7f3d0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --focus-ring: rgba(59, 130, 246, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #1e293b;
+            --bg-quaternary: #374151;
+            --bg-accent: #1e3a8a;
+            --text-primary: #e2e8f0;
+            --text-secondary: #f1f5f9;
+            --text-tertiary: #e5e7eb;
+            --text-quaternary: #f9fafb;
+            --text-muted: #94a3b8;
+            --text-placeholder: #64748b;
+            --border-primary: #374151;
+            --border-secondary: #475569;
+            --border-tertiary: #475569;
+            --border-accent: #1e40af;
+            --accent-primary: #3b82f6;
+            --accent-hover: #60a5fa;
+            --accent-secondary: #60a5fa;
+            --success-primary: #10b981;
+            --success-secondary: #34d399;
+            --success-bg: #064e3b;
+            --success-border: #065f46;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --focus-ring: rgba(59, 130, 246, 0.2);
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,128 +66,184 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
             min-height: 100vh;
             padding: 20px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
         }
         
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px var(--shadow);
+            border: 1px solid var(--border-primary);
+            transition: all 0.3s ease;
         }
-        
+
         h1 {
             text-align: center;
-            color: white;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-size: 2.25rem;
+            font-weight: 600;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            min-width: 60px;
+            height: 32px;
+            z-index: 1000;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .theme-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 28px;
+            height: 28px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        [data-theme="dark"] .theme-toggle-slider {
+            transform: translateX(28px);
+        }
+
+        .theme-icon {
+            font-size: 14px;
+            z-index: 1;
+            color: var(--text-muted);
         }
         
         .form-section {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         
         label {
             display: block;
-            color: white;
-            margin-bottom: 5px;
-            font-weight: 600;
+            color: var(--text-tertiary);
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
         }
         
         input, select {
             width: 100%;
             padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 16px;
-            backdrop-filter: blur(5px);
+            border: 1px solid var(--border-secondary);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-tertiary);
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
         
         input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-placeholder);
         }
         
         input:focus, select:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--focus-ring);
         }
         
         select option {
-            background: #333;
-            color: white;
+            background: var(--bg-secondary);
+            color: var(--text-tertiary);
         }
         
         .btn {
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: var(--accent-primary);
             color: white;
-            padding: 15px 30px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: 600;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
             width: 100%;
-            margin-top: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 16px;
+            transition: background-color 0.2s;
         }
         
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: var(--accent-hover);
         }
         
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
         }
         
         .results-section {
-            margin-top: 30px;
+            margin-top: 24px;
         }
         
         .summary-card {
-            background: linear-gradient(45deg, rgba(76, 175, 80, 0.3), rgba(139, 195, 74, 0.3));
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
+            background: var(--bg-accent);
+            border: 1px solid var(--border-accent);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
             text-align: center;
         }
         
         .summary-number {
-            font-size: 3em;
-            color: #4caf50;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            color: var(--accent-secondary);
+            font-weight: 700;
+            margin-bottom: 8px;
         }
         
         .season-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid #ff9800;
+            background: var(--bg-quaternary);
+            border: 1px solid var(--border-tertiary);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--text-muted);
         }
         
         .season-card.affordable {
-            border-left-color: #4caf50;
+            border-left-color: var(--success-primary);
+            background: var(--success-bg);
+            border-color: var(--success-border);
         }
         
         .season-header {
@@ -144,165 +254,354 @@
         }
         
         .season-title {
-            color: white;
-            margin-bottom: 5px;
+            color: var(--text-quaternary);
+            margin-bottom: 4px;
+            font-size: 16px;
+            font-weight: 600;
         }
         
         .season-date {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-muted);
+            font-size: 14px;
         }
         
         .gem-count {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-tertiary);
             text-align: right;
         }
         
         .gem-count.affordable {
-            color: #4caf50;
+            color: var(--success-secondary);
         }
         
         .info-box {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
             padding: 20px;
-            margin-top: 20px;
+            margin-top: 24px;
         }
         
         .info-box h3 {
-            color: white;
-            margin-bottom: 10px;
+            color: var(--text-quaternary);
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
         }
         
         .info-box ul {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-muted);
             line-height: 1.6;
             list-style-position: inside;
+            font-size: 14px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+
+        .input-summary {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .input-summary h2 {
+            color: var(--text-quaternary);
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .input-summary strong {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-summary div:last-child {
+            color: var(--text-quaternary);
+            font-weight: 600;
+        }
+
+        .breakdown-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .breakdown-container h2 {
+            color: var(--text-quaternary);
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .summary-card h2 {
+            color: var(--text-quaternary);
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .summary-description {
+            color: var(--text-tertiary);
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .summary-when {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .success-text {
+            color: var(--success-secondary);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .gems-label {
+            color: var(--text-placeholder);
+            font-size: 12px;
+        }
+
+        .purchase-note {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-style: italic;
+            margin-top: 4px;
         }
     </style>
 </head>
 <body>
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <span class="theme-icon">☀️</span>
+        <span class="theme-icon">🌙</span>
+        <div class="theme-toggle-slider"></div>
+    </div>
+    
     <div class="container">
-        <h1>🏆 Brawl Pass Calculator</h1>
-        <p style="text-align: center; color: rgba(255, 255, 255, 0.8); margin-bottom: 30px;">
-            Calculate when you'll be able to afford Brawl Passes based on your current gems
+        <h1>Brawl Pass Calculator</h1>
+        <p class="subtitle">
+            Calculate when you'll be able to afford Brawl Passes based on your current gems (based on 2021 version, game has changed since then)
         </p>
 
         <div class="form-section">
-            <form method="POST">
+            <form onsubmit="calc(event)">
                 <div class="grid">
                     <div class="form-group">
-                        <label for="current_balance">💎 Current Balance:</label>
-                        <input type="number" id="current_balance" name="current_balance" value="21" required>
+                        <label for="current_balance">Gem Balance:</label>
+                        <input type="number" id="current_balance" name="current_balance" value="111" min="0" max="1000000" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="season">🏆 Current Season:</label>
-                        <input type="number" id="season" name="season" value="8" required>
+                        <label for="season">Season:</label>
+                        <input type="number" id="season" name="season" value="8" min="1" max="29" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="month">📅 Current Month:</label>
+                        <label for="month">Month:</label>
                         <select id="month" name="month" required>
-                            {% for i, month in enumerate(months) %}
-                                <option value="{{ i + 1 }}" {% if i + 1 == 10 %}selected{% endif %}>{{ month }}</option>
-                            {% endfor %}
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10" selected>October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
-                        <label for="year">📅 Current Year:</label>
-                        <input type="number" id="year" name="year" value="2021" required>
+                        <label for="year">Year:</label>
+                        <input type="number" id="year" name="year" value="2021" min="2021" max="2030" required>
                     </div>
                 </div>
                 
-                <button type="submit" class="btn">🧮 Calculate Brawl Passes</button>
+                <button type="submit" class="btn">Calculate</button>
             </form>
         </div>
 
-        {% if results %}
-        <div class="results-section">
-            <div style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px; margin-bottom: 30px;">
-                <h2 style="color: white; margin-bottom: 15px;">📝 Input Summary</h2>
-                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+        <div class="results-section" id="results" style="display: none;">
+            <div class="input-summary">
+                <h2>Input</h2>
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
                     <div>
-                        <strong style="color: #4ecdc4;">Balance:</strong> 
-                        <span style="color: white;">{{ input_data.current_balance }} gems</span>
+                        <strong>Gems:</strong> 
+                        <div id="summary-balance">111 gems</div>
                     </div>
                     <div>
-                        <strong style="color: #4ecdc4;">Season:</strong> 
-                        <span style="color: white;">{{ input_data.season }}</span>
+                        <strong>Season:</strong> 
+                        <div id="summary-season">8</div>
                     </div>
                     <div>
-                        <strong style="color: #4ecdc4;">Month:</strong> 
-                        <span style="color: white;">{{ input_data.month }}</span>
+                        <strong>Month:</strong> 
+                        <div id="summary-month">October</div>
                     </div>
                     <div>
-                        <strong style="color: #4ecdc4;">Year:</strong> 
-                        <span style="color: white;">{{ input_data.year }}</span>
+                        <strong>Year:</strong> 
+                        <div id="summary-year">2021</div>
                     </div>
                 </div>
             </div>
 
             <div class="summary-card">
-                <h2 style="color: white; margin-bottom: 15px;">🎯 Summary</h2>
-                <div class="summary-number">{{ results.brawl_pass_count }}</div>
-                <div style="color: white; font-size: 1.2em; margin-bottom: 15px;">
-                    Total Brawl Passes You Can Afford
+                <h2>Result</h2>
+                <div class="summary-number" id="total-passes">0</div>
+                <div class="summary-description">
+                    Brawl passes you can buy
                 </div>
-                {% if results.when_brawl_pass %}
-                    <div style="color: rgba(255, 255, 255, 0.9);">
-                        <strong>Available in:</strong> {{ results.when_brawl_pass | join(', ') }}
-                    </div>
-                {% else %}
-                    <div style="color: rgba(255, 255, 255, 0.9);">
-                        No Brawl Passes affordable in the next 6 seasons
-                    </div>
-                {% endif %}
+                <div class="summary-when" id="when-available">
+                    Can't buy any passes in next 6 seasons
+                </div>
             </div>
 
-            <div style="background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 20px;">
-                <h2 style="color: white; margin-bottom: 20px;">📅 Season Breakdown</h2>
-                
-                {% for season in results.season_details %}
-                    <div class="season-card {% if season.balance >= 169 %}affordable{% endif %}">
-                        <div class="season-header">
-                            <div style="flex: 1; min-width: 200px;">
-                                <h3 class="season-title">
-                                    🏆 Season {{ season.season }}
-                                    {% if season.balance >= 169 %}
-                                        <span style="color: #4caf50; font-size: 0.8em;">✅ Can Buy Pass!</span>
-                                    {% endif %}
-                                </h3>
-                                <div class="season-date">
-                                    {{ season.start_month }} - {{ season.end_month }} {{ season.year }}
-                                </div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div class="gem-count {% if season.balance >= 169 %}affordable{% endif %}">
-                                    💎 {{ season.balance }}
-                                </div>
-                                <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.9em;">
-                                    gems
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+            <div class="breakdown-container">
+                <h2>Season breakdown</h2>
+                <div id="season-list"></div>
             </div>
         </div>
-        {% endif %}
 
         <div class="info-box">
-            <h3>ℹ️ How it works:</h3>
+            <h3>How it works:</h3>
             <ul>
-                <li>Each season lasts 2 months and gives +90 gems</li>
-                <li>Brawl Pass costs 169 gems</li>
-                <li>Calculator shows next 6 seasons</li>
-                <li>Current balance should be total gems that can be claimed in the whole brawl pass</li>
+                <li>Season lasts 2 months and gives 90 gems</li>
+                <li>Brawl pass costs 169 gems</li>
+                <li>Shows next 6 seasons</li>
+                <li>Every season adds 90 gems to balance</li>
+                <li>Buying pass removes 169 gems from balance</li>
             </ul>
         </div>
     </div>
+
+    <script>
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const newTheme = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        function calc(event) {
+            event.preventDefault();
+            
+            const bal = parseInt(document.getElementById('current_balance').value);
+            const season = parseInt(document.getElementById('season').value);
+            const month = parseInt(document.getElementById('month').value);
+            const year = parseInt(document.getElementById('year').value);
+
+            document.getElementById('summary-balance').textContent = bal + ' gems';
+            document.getElementById('summary-season').textContent = season;
+            document.getElementById('summary-month').textContent = months[month - 1];
+            document.getElementById('summary-year').textContent = year;
+
+            const seasons = [];
+            let gems = bal;
+            let passes = 0;
+            const canBuy = [];
+
+            for (let i = 0; i < 6; i++) {
+                const s = season + i;
+                
+                if (i > 0) {
+                    gems += 90;
+                }
+                
+                const startMonth = ((month - 1 + i * 2) % 12) + 1;
+                const endMonth = ((month - 1 + i * 2 + 1) % 12) + 1;
+                const yearOffset = Math.floor((month - 1 + i * 2) / 12);
+                const sYear = year + yearOffset;
+
+                const affordable = gems >= 169;
+                let afterPurchase = gems;
+                let bought = false;
+                
+                if (affordable) {
+                    passes++;
+                    canBuy.push(`Season ${s}`);
+                    afterPurchase = gems - 169;
+                    bought = true;
+                    gems = afterPurchase;
+                }
+
+                seasons.push({
+                    season: s,
+                    before: i === 0 ? gems : gems + (bought ? 169 : 0),
+                    after: afterPurchase,
+                    affordable: affordable,
+                    bought: bought,
+                    start: months[startMonth - 1],
+                    end: months[endMonth - 1],
+                    year: sYear
+                });
+            }
+
+            document.getElementById('total-passes').textContent = passes;
+            
+            if (canBuy.length > 0) {
+                document.getElementById('when-available').innerHTML = `<strong>Available:</strong> ${canBuy.join(', ')}`;
+            } else {
+                document.getElementById('when-available').textContent = "Can't buy any passes in next 6 seasons";
+            }
+
+            const list = document.getElementById('season-list');
+            list.innerHTML = '';
+            
+            seasons.forEach((s, idx) => {
+                const div = document.createElement('div');
+                div.className = `season-card ${s.affordable ? 'affordable' : ''}`;
+                
+                const showGems = s.bought ? s.after : s.before;
+                
+                div.innerHTML = `
+                    <div class="season-header">
+                        <div style="flex: 1; min-width: 180px;">
+                            <h3 class="season-title">
+                                Season ${s.season}
+                                ${s.affordable ? '<span class="success-text">  Can buy</span>' : ''}
+                            </h3>
+                            <div class="season-date">
+                                ${s.start} - ${s.end} ${s.year}
+                            </div>
+                            ${s.bought ? '<div class="purchase-note">Pass bought (-169 gems)</div>' : ''}
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="gem-count ${s.affordable ? 'affordable' : ''}">
+                                ${showGems}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                list.appendChild(div);
+            });
+
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
